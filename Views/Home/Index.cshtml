@@ -1,0 +1,285 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    <div ng-controller="studentcontroller" style="margin:20px;">
+        <div id="DisplayStudent" ng-show="DetailView" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div>
+                <button ng-click="Add()" type="button" class="btn btn-info">Add New</button><br />
+            </div><br />
+            <div class="row">
+                <div class="col-lg-4 col-md-6" ng-repeat=" student in students">
+                    <div class="block" ng-click="Edit(student);">
+                        <div class="heading">
+                            <div style="margin-top:5px;">STUDENT ID CARD</div>
+                        </div>
+                        <div class="photo">
+                            <img ng-src={{student.ImagePath}} alt="" style="height:85px; width:75px" />
+                        </div>
+                        <div class="detail">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b>Name :</b>
+                                    </td>
+                                    <td>
+                                        {{student.FirstName + ' ' + student.LastName}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Email :</b>
+                                    </td>
+                                    <td>
+                                        {{student.EmailId}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Gender :</b>
+                                    </td>
+                                    <td>
+                                        {{student.Gender}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>BirthDate :</b>
+                                    </td>
+                                    <td>
+                                        {{student.BirthDate | date:'dd/MM/yyyy'}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b>Enrollment :</b>
+                                    </td>
+                                    <td>
+                                        {{student.EnrollmentNo}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="AddStudent" ng-show="AddView">
+            <form id="myForm" name="studentForm" ng-submit="Save()" novalidate>
+                <div class="form-group">
+                    <input ng-hide="true" type="text" name="StudentId" class="form-control" ng-model="Student.StudentId">
+                </div>
+
+                <div class="form-group">
+                    <label>FirstName</label>
+                    <input type="text" name="FirstName" class="form-control" ng-model="Student.FirstName" maxlength="20" allow-pattern="[a-z]" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.FirstName.$invalid) || ((studentForm.FirstName.$touched || studentForm.FirstName.$dirty) && studentForm.FirstName.$invalid)" ng-messages="studentForm.FirstName.$error">
+                        <p ng-message="maxlength">Maximum Length is 20</p>
+                        <p ng-message="required">Your FirstName is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>LastName</label>
+                    <input type="text" name="LastName" class="form-control" ng-model="Student.LastName" maxlength="20" allow-pattern="[a-z]" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.LastName.$invalid) || ((studentForm.LastName.$touched || studentForm.LastName.$dirty) && studentForm.LastName.$invalid)" ng-messages="studentForm.LastName.$error">
+                        <p ng-message="maxlength">Maximum Length is 20</p>
+                        <p ng-message="required">Your LastName is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label><br />
+                    <input type="radio" name="Gender" class="radio-inline" ng-model="Student.Gender" value="Male" ng-required="!Student.Gender"><label>Male</label>
+                    <input type="radio" name="Gender" class="radio-inline" ng-model="Student.Gender" value="Female" ng-required="!Student.Gender"><label>Female</label>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.Gender.$invalid) || ((studentForm.Gender.$touched || studentForm.Gender.$dirty) && studentForm.Gender.$invalid)" ng-messages="studentForm.Gender.$error">
+                        <p ng-message="required">Please Select Your Gender.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>BirthDate</label>
+                    <input type="date" name="BirthDate" class="form-control" ng-model="Student.BirthDate" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.BirthDate.$invalid) || ((studentForm.BirthDate.$touched || studentForm.BirthDate.$dirty) && studentForm.BirthDate.$invalid)" ng-messages="studentForm.BirthDate.$error">
+                        <p ng-message="required">Please Select Your BirthDate.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Enrollment No.</label>
+                    <input type="text" name="Enrollment" class="form-control" ng-model="Student.EnrollmentNo" maxlength="10" allow-pattern="\d" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.Enrollment.$invalid) || ((studentForm.Enrollment.$touched || studentForm.Enrollment.$dirty) && studentForm.Enrollment.$invalid)" ng-messages="studentForm.Enrollment.$error">
+                        <p ng-message="maxlength">Maximum Length is 10</p>
+                        <p ng-message="pattern">Only Numbers are Allowed...!</p>
+                        <p ng-message="required">Your Enrollment No. is required.</p>
+                    </div>
+                </div>
+
+                <!-- email field -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="Email" class="form-control" ng-model="Student.EmailId" maxlength="50" ng-pattern="emailpattern" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.Email.$invalid) || ((studentForm.Email.$touched || studentForm.Email.$dirty) && studentForm.Email.$invalid)" ng-messages="studentForm.Email.$error">
+                        <p ng-message="pattern">Please Enter Valid Email</p>
+                        <p ng-message="required">Your Email is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Image</label>
+                    <input class="form-control" type="file" id="file" name="file" onchange="angular.element(this).scope().ImageValidate(this.files)" required />
+                    <div style="color:red;" class="help-block" ng-show="(studentForm.$submitted && studentForm.file.$invalid) || ((studentForm.file.$touched || studentForm.file.$dirty) && studentForm.file.$invalid)" ng-messages="studentForm.file.$error">
+                        <p ng-message="required">Please Select Image</p>
+                    </div>
+                    <p style="color:red;">{{FileInvalidMessage}}</p>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn-danger" ng-click="Cancel();">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="EditStudent" ng-show="EditView">
+            <form id="myForm" name="studentUpdateForm" ng-submit="Update()" novalidate>
+                <div class="form-group">
+                    <input ng-hide="true" type="text" name="StudentId" class="form-control" ng-model="Student.StudentId">
+                </div>
+
+                <div class="form-group">
+                    <label>FirstName</label>
+                    <input type="text" name="FirstName" class="form-control" ng-model="Student.FirstName" maxlength="20" allow-pattern="[a-z]" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.FirstName.$invalid) || ((studentUpdateForm.FirstName.$touched || studentUpdateForm.FirstName.$dirty) && studentUpdateForm.FirstName.$invalid)" ng-messages="studentUpdateForm.FirstName.$error">
+                        <p ng-message="maxlength">Maximum Length is 20</p>
+                        <p ng-message="required">Your FirstName is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>LastName</label>
+                    <input type="text" name="LastName" class="form-control" ng-model="Student.LastName" maxlength="20" allow-pattern="[a-z]" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.LastName.$invalid) || ((studentUpdateForm.LastName.$touched || studentUpdateForm.LastName.$dirty) && studentUpdateForm.LastName.$invalid)" ng-messages="studentUpdateForm.LastName.$error">
+                        <p ng-message="maxlength">Maximum Length is 20</p>
+                        <p ng-message="required">Your LastName is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label><br />
+                    <input type="radio" name="Gender" class="radio-inline" ng-model="Student.Gender" value="Male" ng-required="!Student.Gender"><label>Male</label>
+                    <input type="radio" name="Gender" class="radio-inline" ng-model="Student.Gender" value="Female" ng-required="!Student.Gender"><label>Female</label>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.Gender.$invalid) || ((studentUpdateForm.Gender.$touched || studentUpdateForm.Gender.$dirty) && studentUpdateForm.Gender.$invalid)" ng-messages="studentUpdateForm.Gender.$error">
+                        <p ng-message="required">Please Select Your Gender.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>BirthDate</label>
+                    <input type="date" name="BirthDate" class="form-control" ng-model="Student.BirthDate" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.BirthDate.$invalid) || ((studentUpdateForm.BirthDate.$touched || studentUpdateForm.BirthDate.$dirty) && studentUpdateForm.BirthDate.$invalid)" ng-messages="studentUpdateForm.BirthDate.$error">
+                        <p ng-message="required">Please Select Your BirthDate.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Enrollment No.</label>
+                    <input type="text" name="Enrollment" class="form-control" ng-model="Student.EnrollmentNo" maxlength="10" allow-pattern="\d" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.Enrollment.$invalid) || ((studentUpdateForm.Enrollment.$touched || studentUpdateForm.Enrollment.$dirty) && studentUpdateForm.Enrollment.$invalid)" ng-messages="studentUpdateForm.Enrollment.$error">
+                        <p ng-message="maxlength">Maximum Length is 10</p>
+                        <p ng-message="pattern">Only Numbers are Allowed...!</p>
+                        <p ng-message="required">Your Enrollment No. is required.</p>
+                    </div>
+                </div>
+
+                <!-- email field -->
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="Email" class="form-control" ng-model="Student.EmailId" maxlength="50" ng-pattern="emailpattern" required>
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.Email.$invalid) || ((studentUpdateForm.Email.$touched || studentUpdateForm.Email.$dirty) && studentUpdateForm.Email.$invalid)" ng-messages="studentUpdateForm.Email.$error">
+                        <p ng-message="pattern">Please Enter Valid Email</p>
+                        <p ng-message="required">Your Email is required.</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="EditImageView">
+                    <label>Image</label>
+                    <input class="form-control" type="file" id="Editfile" name="file" onchange="angular.element(this).scope().ImageValidate(this.files)" required />
+                    <div style="color:red;" class="help-block" ng-show="(studentUpdateForm.$submitted && studentUpdateForm.file.$invalid) || ((studentUpdateForm.file.$touched || studentUpdateForm.file.$dirty) && studentUpdateForm.file.$invalid)" ng-messages="studentUpdateForm.file.$error">
+                        <p ng-message="required">Please Select Image</p>
+                    </div>
+                    <p style="color:red;">{{FileInvalidMessage}}</p>
+                </div>
+                <div class="photo" ng-show="ShowImage" ng-click="EditImage();">
+                    <img ng-src={{Student.ImagePath}} alt="" style="height:85px; width:75px" />
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">Update</button>
+                    <button class="btn btn-danger" ng-click="Cancel();">Cancel</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div id="DeleteStudent">
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/MyScript/directive.js"></script>
+<style>
+    .ng-touched.ng-invalid {
+	    border-color: red;
+    }
+    .ng-dirty.ng-invalid {
+      border-color: red;
+    }
+    .ng-submitted input.ng-invalid{
+      border-color: red;
+    }
+
+    .block {
+        background-image:url(/Images/backgroundId.jpg);
+        margin-bottom:20px;
+        border-radius:5px;
+        height:180px;
+        width:335px;
+        text-align:center;
+        font-size: 20px;
+    }
+
+    .photo {
+        border:2px solid black;
+        margin-bottom:20px;
+        margin-left:10px;
+        margin-top:20px;
+        border-radius:5px;
+        height:90px;
+        width:80px;
+        text-align:center;
+        font-size: 20px;
+    }
+
+    .detail {
+        margin-left:100px;
+        margin-top:-115px;
+        border-radius:5px;
+        height:110px;
+        width:225px;
+        text-align:left;
+        font-size: 12px;
+    }
+
+    .heading {
+        background-color:#cc3300;
+        margin-bottom:10px;
+        border:1px solid black;
+        border-radius:5px 5px 0px 0px;
+        height:40px;
+        width:335px;
+        text-align:center;
+        font-size: 20px;
+        color:white;
+    }
+</style>
